@@ -1,100 +1,17 @@
 from optparse import OptionParser
-from collections import namedtuple
 
-from _ccv import ffi, lib
-
-Feature = namedtuple("Feature", "x1 y1 x2 y2 confidence")
-
-
-def ccv_read(inp, ttype, rows=0, cols=0, scanline=0):
-    """
-    Read an image from a filename specified by inp and a matching ttype.
-
-    Returns an internal ccv_dense_matrix_t*
-    """
-    image = ffi.new('ccv_dense_matrix_t*[1]')
-    lib.ccv_read_impl(inp, image, ttype, rows, cols, scanline)
-    if image[0] == ffi.NULL:
-        raise Exception("Failed to read %s with ttype %d" % (inp, ttype))
-    return image[0]
-
-
-def prepare_scd_cascade(inp):
-    casc = ffi.new('ccv_scd_classifier_cascade_t*[1]');
-    casc[0] = lib.ccv_scd_classifier_cascade_read(inp)
-    if casc[0] == ffi.NULL:
-        raise Exception("Failed to read SCD cascade from %s" % inp)
-    return casc
-
-
-def prepare_bbf_cascade(inp):
-    casc = ffi.new('ccv_bbf_classifier_cascade_t*[1]');
-    casc[0] = lib.ccv_bbf_read_classifier_cascade(inp)
-    if casc[0] == ffi.NULL:
-        raise Exception("Failed to read BBF cascade from %s" % inp)
-    return casc
-
-
-def ccv_array_get(array, index, cast_to='ccv_comp_t*'):
-    arr = array.data + (array.rsize * index)
-    return ffi.cast(cast_to, arr)
-
-
-def scd_detect_objects(filename, cascade):
-    """
-    SURF-Cascade object detection. This can be used for face recognition.
-
-    Returns a list of Features.
-    """
-    ttype = lib.CCV_IO_RGB_COLOR | lib.CCV_IO_ANY_FILE
-    assert ttype == 800
-    image = ccv_read(filename, ttype)
-
-    rects = []
-    faces = lib.ccv_scd_detect_objects(image, cascade, 1, lib.ccv_scd_default_params)
-    for i in xrange(faces.rnum):
-        entry = ccv_array_get(faces, i)
-        rect = entry.rect
-        rects.append(Feature(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height,
-                             entry.classification.confidence))
-
-    lib.ccv_array_free(faces)
-    lib.ccv_matrix_free(image)
-    return rects
-
-
-def bbf_detect_objects(filename, cascade):
-    """
-    Brightness Binary Feature object detection. This can be used for face recognition.
-
-    Returns a list of Features.
-    """
-    lib.ccv_enable_default_cache()
-
-    image = ccv_read(filename, lib.CCV_IO_GRAY | lib.CCV_IO_ANY_FILE)
-
-    rects = []
-    seq = lib.ccv_bbf_detect_objects(image, cascade, 1, lib.ccv_bbf_default_params)
-    for i in xrange(seq.rnum):
-        comp = ccv_array_get(seq, i)
-        rect = comp.rect
-        rects.append(Feature(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height,
-                             comp.classification.confidence))
-
-    lib.ccv_array_free(seq)
-    lib.ccv_matrix_free(image)
-
-    lib.ccv_disable_cache()
-    return rects
+import ccv
 
 
 def main(classifier, cascade, verbose, *filenames):
     if classifier == 'scd':
-        cascade = prepare_scd_cascade(cascade)
-        detector = scd_detect_objects
+        cascade = ccv.prepare_scd_cascade(cascade)
+        detector = ccv.scd_detect_objects
+    elif classifier == 'bbf':
+        cascade = ccv.prepare_bbf_cascade(cascade)
+        detector = ccv.bbf_detect_objects
     else:
-        cascade = prepare_bbf_cascade(cascade)
-        detector = bbf_detect_objects
+        raise Exception('Unknown classifier %r' % classifier)
 
     for name in filenames:
         # face recognition
@@ -106,9 +23,9 @@ def main(classifier, cascade, verbose, *filenames):
             print name, x
 
     if classifier == 'scd':
-        lib.ccv_scd_classifier_cascade_free(cascade[0])
+        ccv.lib.ccv_scd_classifier_cascade_free(cascade[0])
     else:
-        lib.ccv_bbf_classifier_cascade_free(cascade[0])
+        ccv.lib.ccv_bbf_classifier_cascade_free(cascade[0])
 
 
 if __name__ == "__main__":

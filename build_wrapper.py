@@ -5,6 +5,21 @@ from cffi import FFI
 
 ffi = FFI()
 ffi.cdef("""
+enum {
+  CCV_8U  = 0x01000,
+  CCV_32S = 0x02000,
+  CCV_32F = 0x04000,
+  CCV_64S = 0x08000,
+  CCV_64F = 0x10000,
+};
+
+enum {
+  CCV_C1 = 0x001,
+  CCV_C2 = 0x002,
+  CCV_C3 = 0x003,
+  CCV_C4 = 0x004,
+};
+
 typedef struct {
   int width;
   int height;
@@ -133,14 +148,40 @@ enum {
 };
 
 enum {
-  CCV_IO_ANY_FILE = 0x020,
-  ...
+  CCV_IO_ANY_STREAM     = 0x010,
+  CCV_IO_BMP_STREAM     = 0x011,
+  CCV_IO_JPEG_STREAM    = 0x012,
+  CCV_IO_PNG_STREAM     = 0x013,
+  CCV_IO_PLAIN_STREAM   = 0x014,
+  CCV_IO_DEFLATE_STREAM = 0x015,
+  CCV_IO_ANY_FILE       = 0x020,
+  CCV_IO_BMP_FILE       = 0x021,
+  CCV_IO_JPEG_FILE      = 0x022,
+  CCV_IO_PNG_FILE       = 0x023,
+  CCV_IO_BINARY_FILE    = 0x024,
+  CCV_IO_ANY_RAW        = 0x040,
+  CCV_IO_RGB_RAW        = 0x041,
+  CCV_IO_RGBA_RAW       = 0x042,
+  CCV_IO_ARGB_RAW       = 0x043,
+  CCV_IO_BGR_RAW        = 0x044,
+  CCV_IO_BGRA_RAW       = 0x045,
+  CCV_IO_ABGR_RAW       = 0x046,
+  CCV_IO_GRAY_RAW       = 0x047
+};
+
+enum {
+  CCV_IO_FINAL = 0x00,
+  CCV_IO_CONTINUE,
+  CCV_IO_ERROR,
+  CCV_IO_ATTEMPTED,
+  CCV_IO_UNKNOWN
 };
 
 void ccv_disable_cache(void);
 void ccv_enable_default_cache(void);
 
 int ccv_read_impl(const char*, ccv_dense_matrix_t**, int, int, int, int);
+int ccv_write(ccv_dense_matrix_t*, char*, int*, int, void*);
 
 ccv_scd_classifier_cascade_t* ccv_scd_classifier_cascade_read(const char*);
 ccv_array_t* ccv_scd_detect_objects(ccv_dense_matrix_t*, ccv_scd_classifier_cascade_t**, int, ccv_scd_param_t);
@@ -148,6 +189,12 @@ void ccv_scd_classifier_cascade_free(ccv_scd_classifier_cascade_t* cascade);
 
 void ccv_array_free(ccv_array_t*);
 void ccv_matrix_free(ccv_matrix_t*);
+
+void ccv_visualize(ccv_matrix_t*, ccv_matrix_t**, int);
+
+void ccv_sobel(ccv_dense_matrix_t*, ccv_dense_matrix_t**, int, int, int);
+void ccv_gradient(ccv_dense_matrix_t*, ccv_dense_matrix_t**, int, ccv_dense_matrix_t**, int, int, int);
+
 
 #define CCV_BBF_POINT_MAX 8
 
