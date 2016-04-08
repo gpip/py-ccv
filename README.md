@@ -25,6 +25,16 @@ cd ../../py-ccv
 ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python setup.py install
 ```
 
+## Build only this wrapper
+
+If you already have `libccv.so` then you might want to install directly via pip:
+
+```
+LDFLAGS="-L$(pwd)/ccv/lib" CFLAGS="-I$(pwd)/ccv/lib" pip install ccv
+```
+
+Remember to adjust the paths according to where `ccv.h` and `libccv.so` are installed in your system.
+
 
 ## Face Detection Usage
 
