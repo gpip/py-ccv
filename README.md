@@ -60,6 +60,22 @@ Options:
   --quiet
 ```
 
+##### Using as a library
+
+```
+import face_detect
+
+result = face_detect.main('scd', '../ccv/samples/face.sqlite3', False,
+                          # Specify one or more filenames now
+                          'img/lena.png')
+
+# face_detect.main returns a dict containing
+# {<filename>: <list of face_detect.Feature>}
+for name, rects in result.iteritems():
+    print name, rects
+```
+
+
 ##### Visualize
 
 This wrapper does not include an utility to draw the resulting rectangles, so the following example uses ImageMagick:
