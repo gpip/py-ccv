@@ -1,2 +1,6 @@
+.eggs/
+build/
+dist/
+ccv.egg-info/
 _ccv*
 *.pyc

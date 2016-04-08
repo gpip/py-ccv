@@ -242,5 +242,8 @@ ffi.set_source('_ccv', '#include <ccv.h>',
     include_dirs=[os.getenv('INCDIR') or '.'],
     library_dirs=[os.getenv('LIBDIR') or '.'],
     libraries=['ccv'])
-res = ffi.compile()
-print res
+
+
+if __name__ == "__main__":
+    res = ffi.compile()
+    print res

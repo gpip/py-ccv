@@ -18,12 +18,11 @@ patch -p2 < ../../py-ccv/dynlib.patch
 make libccv.so
 ```
 
-Build the Python wrapper (`ARCHFLAGS` was used on a OSX build, adjust for your platform):
+Build and install the Python wrapper (`ARCHFLAGS` was used on a OSX build, adjust for your platform):
 
 ```
 cd ../../py-ccv
-pip install -r requirements.txt
-ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrapper.py
+ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python setup.py install
 ```
 
 
@@ -34,21 +33,21 @@ ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrappe
 ##### Face detection using SCD
 
 ```
-$ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py -c ../ccv/samples/face.sqlite3 img/lena.png
+$ DYLD_LIBRARY_PATH=../ccv/lib python -m ccv.face_detect -c ../ccv/samples/face.sqlite3 img/lena.png
 img/lena.png Feature(x1=229, y1=216, x2=381, y2=368, confidence=5.014610767364502)
 ```
 
 ##### Face detection using BBF
 
 ```
-$ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py --bbf -c ../ccv/samples/face img/lena.png
+$ DYLD_LIBRARY_PATH=../ccv/lib python -m ccv.face_detect --bbf -c ../ccv/samples/face img/lena.png
 img/lena.png Feature(x1=230, y1=211, x2=384, y2=365, confidence=0.4947386682033539)
 ```
 
 ##### Help
 
 ```
-$ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py --help
+$ DYLD_LIBRARY_PATH=../ccv/lib python -m ccv.face_detect.py --help
 Usage: face_detect.py [options] filename...
 
 Options:
@@ -63,7 +62,7 @@ Options:
 ##### Using face_detect as a library
 
 ```
-import face_detect
+from ccv import face_detect
 
 names = ['img/lena.png']
 result = face_detect.main('scd', '../ccv/samples/face.sqlite3', False, *names)
