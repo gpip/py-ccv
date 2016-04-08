@@ -85,7 +85,7 @@ def visualize(mat, outtype=0):
 
 
 def prepare_scd_cascade(inp):
-    casc = ffi.new('ccv_scd_classifier_cascade_t*[1]');
+    casc = ffi.new('ccv_scd_classifier_cascade_t*[1]')
     casc[0] = lib.ccv_scd_classifier_cascade_read(inp)
     if casc[0] == ffi.NULL:
         raise Exception("Failed to read SCD cascade from %s" % inp)
@@ -93,7 +93,7 @@ def prepare_scd_cascade(inp):
 
 
 def prepare_bbf_cascade(inp):
-    casc = ffi.new('ccv_bbf_classifier_cascade_t*[1]');
+    casc = ffi.new('ccv_bbf_classifier_cascade_t*[1]')
     casc[0] = lib.ccv_bbf_read_classifier_cascade(inp)
     if casc[0] == ffi.NULL:
         raise Exception("Failed to read BBF cascade from %s" % inp)
