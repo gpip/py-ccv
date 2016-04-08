@@ -22,11 +22,6 @@ def main(classifier, cascade, verbose, *filenames):
         for x in r:
             print name, x
 
-    if classifier == 'scd':
-        ccv.lib.ccv_scd_classifier_cascade_free(cascade[0])
-    else:
-        ccv.lib.ccv_bbf_classifier_cascade_free(cascade[0])
-
 
 if __name__ == "__main__":
     usage = "usage: %prog [options] filename..."

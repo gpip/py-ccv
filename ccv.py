@@ -5,6 +5,8 @@ from _ccv import ffi, lib
 
 Feature = namedtuple("Feature", "x1 y1 x2 y2 confidence")
 
+_matrix_ref = lambda ptr: ffi.gc(ptr, lib.ccv_matrix_free)
+
 
 def ccv_read(inp, ttype=None, rows=0, cols=0, scanline=0):
     """
@@ -21,7 +23,7 @@ def ccv_read(inp, ttype=None, rows=0, cols=0, scanline=0):
         raise Exception("Failed to read %s with ttype %d: %d" % (inp, ttype, res))
     if image[0] == ffi.NULL:
         raise Exception("NULL image")
-    return image[0]
+    return _matrix_ref(image[0])
 
 
 def ccv_array_get(array, index, cast_to='ccv_comp_t*'):
@@ -52,7 +54,7 @@ def sobel(im, mtype, dx=1, dy=1):
     lib.ccv_sobel(im, output, mtype, dx, dy)
     if output[0] == ffi.NULL:
         raise Exception("NULL output")
-    return output[0]
+    return _matrix_ref(output[0])
 
 
 def gradient(im, dx=1, dy=1):
@@ -64,7 +66,7 @@ def gradient(im, dx=1, dy=1):
     lib.ccv_gradient(im, theta, 0, magnitude, 0, dx, dy)
     if theta[0] == ffi.NULL or magnitude[0] == ffi.NULL:
         raise Exception("NULL output")
-    return theta[0], magnitude[0]
+    return _matrix_ref(theta[0]), _matrix_ref(magnitude[0])
 
 
 def visualize(mat, outtype=0):
@@ -76,7 +78,7 @@ def visualize(mat, outtype=0):
     lib.ccv_visualize(mat, output, outtype)
     if output[0] == ffi.NULL:
         raise Exception("NULL output")
-    return output[0]
+    return _matrix_ref(output[0])
 
 
 def prepare_scd_cascade(inp):
@@ -84,7 +86,7 @@ def prepare_scd_cascade(inp):
     casc[0] = lib.ccv_scd_classifier_cascade_read(inp)
     if casc[0] == ffi.NULL:
         raise Exception("Failed to read SCD cascade from %s" % inp)
-    return casc
+    return ffi.gc(casc, lambda x: lib.ccv_scd_classifier_cascade_free(x[0]))
 
 
 def prepare_bbf_cascade(inp):
@@ -92,7 +94,7 @@ def prepare_bbf_cascade(inp):
     casc[0] = lib.ccv_bbf_read_classifier_cascade(inp)
     if casc[0] == ffi.NULL:
         raise Exception("Failed to read BBF cascade from %s" % inp)
-    return casc
+    return ffi.gc(casc, lambda x: lib.ccv_bbf_classifier_cascade_free(x[0]))
 
 
 def scd_detect_objects(filename, cascade):
@@ -114,7 +116,6 @@ def scd_detect_objects(filename, cascade):
                              entry.classification.confidence))
 
     lib.ccv_array_free(faces)
-    lib.ccv_matrix_free(image)
     return rects
 
 
@@ -137,7 +138,6 @@ def bbf_detect_objects(filename, cascade):
                              comp.classification.confidence))
 
     lib.ccv_array_free(seq)
-    lib.ccv_matrix_free(image)
 
     lib.ccv_disable_cache()
     return rects
