@@ -22,6 +22,7 @@ Build the Python wrapper (`ARCHFLAGS` was used on a OSX build, adjust for your p
 
 ```
 cd ../../py-ccv
+pip install -r requirements.txt
 ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrapper.py
 ```
 
