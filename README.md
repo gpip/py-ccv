@@ -35,14 +35,14 @@ ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrappe
 
 ```
 $ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py -c ../ccv/samples/face.sqlite3 img/lena.png
-Feature(x1=229, y1=216, x2=381, y2=368, confidence=5.014610767364502)
+img/lena.png Feature(x1=229, y1=216, x2=381, y2=368, confidence=5.014610767364502)
 ```
 
 ##### Face detection using BBF
 
 ```
 $ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py --bbf -c ../ccv/samples/face img/lena.png
-Feature(x1=230, y1=211, x2=384, y2=365, confidence=0.4947386682033539)
+img/lena.png Feature(x1=230, y1=211, x2=384, y2=365, confidence=0.4947386682033539)
 ```
 
 ##### Help
@@ -65,13 +65,12 @@ Options:
 ```
 import face_detect
 
-result = face_detect.main('scd', '../ccv/samples/face.sqlite3', False,
-                          # Specify one or more filenames now
-                          'img/lena.png')
+names = ['img/lena.png']
+result = face_detect.main('scd', '../ccv/samples/face.sqlite3', False, *names)
 
-# face_detect.main returns a dict containing
-# {<filename>: <list of face_detect.Feature>}
-for name, rects in result.iteritems():
+# face_detect.main is a generator which yields tuples of
+# (<filename>, [<list of face_detect.Feature>])
+for name, rects in result:
     print name, rects
 ```
 

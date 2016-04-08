@@ -96,22 +96,19 @@ def main(classifier, cascade, verbose, *filenames):
         cascade = prepare_bbf_cascade(cascade)
         detector = bbf_detect_objects
 
-    result = {}
     for name in filenames:
         # face recognition
         r = detector(name, cascade)
-        result[name] = r
+        yield (name, r)
         if not verbose:
             continue
         for x in r:
-            print x
+            print name, x
 
     if classifier == 'scd':
         lib.ccv_scd_classifier_cascade_free(cascade[0])
     else:
         lib.ccv_bbf_classifier_cascade_free(cascade[0])
-
-    return result
 
 
 if __name__ == "__main__":
@@ -140,4 +137,4 @@ if __name__ == "__main__":
     cascade = options.cascade
     verbose = not options.quiet
 
-    main(classifier, cascade, verbose, *args)
+    list(main(classifier, cascade, verbose, *args))
