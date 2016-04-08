@@ -48,8 +48,11 @@ def ccv_write(im, outname):
 
 
 def sobel(im, mtype, dx=1, dy=1):
-    if not dx % 2 or not dy % 2:
-        raise Exception("dx and dy must be odd")
+    if (dx and not dx % 2) or (dy and not dy % 2):
+        raise Exception("dx and dy must be odd if specified")
+    if not dx and not dy:
+        raise Exception("both dx and dy are missing")
+
     output = ffi.new('ccv_dense_matrix_t*[1]')
     lib.ccv_sobel(im, output, mtype, dx, dy)
     if output[0] == ffi.NULL:
