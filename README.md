@@ -75,7 +75,7 @@ for name, rects in result:
 ```
 
 
-##### Visualize
+##### Visualization
 
 This wrapper does not include an utility to draw the resulting rectangles, so the following example uses ImageMagick:
 
