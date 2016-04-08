@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from _ccv import ffi, lib
 
-Feature = namedtuple("Feature", "x y width height confidence")
+Feature = namedtuple("Feature", "x1 y1 x2 y2 confidence")
 
 
 def ccv_read(inp, ttype, rows=0, cols=0, scanline=0):
@@ -55,7 +55,7 @@ def scd_detect_objects(filename, cascade):
     for i in xrange(faces.rnum):
         entry = ccv_array_get(faces, i)
         rect = entry.rect
-        rects.append(Feature(rect.x, rect.y, rect.width, rect.height,
+        rects.append(Feature(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height,
                              entry.classification.confidence))
 
     lib.ccv_array_free(faces)
@@ -78,7 +78,7 @@ def bbf_detect_objects(filename, cascade):
     for i in xrange(seq.rnum):
         comp = ccv_array_get(seq, i)
         rect = comp.rect
-        rects.append(Feature(rect.x, rect.y, rect.width, rect.height,
+        rects.append(Feature(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height,
                              comp.classification.confidence))
 
     lib.ccv_array_free(seq)

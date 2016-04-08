@@ -35,14 +35,14 @@ ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrappe
 
 ```
 $ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py -c ../ccv/samples/face.sqlite3 img/lena.png
-Feature(x=229, y=216, width=152, height=152, confidence=5.014610767364502)
+Feature(x1=229, y1=216, x2=381, y2=368, confidence=5.014610767364502)
 ```
 
 ##### Face detection using BBF
 
 ```
 $ DYLD_LIBRARY_PATH=../ccv/lib python face_detect.py --bbf -c ../ccv/samples/face img/lena.png
-Feature(x=230, y=211, width=154, height=154, confidence=0.4947386682033539)
+Feature(x1=230, y1=211, x2=384, y2=365, confidence=0.4947386682033539)
 ```
 
 ##### Help
@@ -58,4 +58,12 @@ Options:
   -c CASCADE, --cascade=CASCADE
                         Path to cascade to read
   --quiet
+```
+
+##### Visualize
+
+This wrapper does not include an utility to draw the resulting rectangles, so the following example uses ImageMagick:
+
+```
+$ convert img/lena.png -fill none -stroke blue -strokewidth 3 -draw "rectangle 229,216 381,368" result.png
 ```
