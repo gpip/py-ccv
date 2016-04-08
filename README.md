@@ -33,7 +33,7 @@ If you already have `libccv.so` then you might want to install directly via pip:
 LDFLAGS="-L$(pwd)/ccv/lib" CFLAGS="-I$(pwd)/ccv/lib" pip install ccv
 ```
 
-Remember to adjust the paths according to where `ccv.h` and `libccv.so` are installed in your system.
+Remember to adjust the paths according to where `libccv.so` and `ccv.h` are installed in your system.
 
 
 ## Face Detection Usage
