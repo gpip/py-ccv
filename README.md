@@ -14,7 +14,6 @@ Patch `ccv` so it can be compiled as a dynamic lib, and compile it:
 ```
 cd ccv/lib
 patch -p2 < ../../py-ccv/dynlib.patch
-cd ccv/lib
 ./configure
 make libccv.so
 ```
