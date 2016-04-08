@@ -27,7 +27,7 @@ ARCHFLAGS='-arch x86_64' INCDIR=../ccv/lib LIBDIR=../ccv/lib python build_wrappe
 ```
 
 
-## Usage
+## Face Detection Usage
 
 (`DYLD_LIBRARY_PATH` was used on OSX, adjust it for your platform)
 
@@ -60,7 +60,7 @@ Options:
   --quiet
 ```
 
-##### Using as a library
+##### Using face_detect as a library
 
 ```
 import face_detect
@@ -84,3 +84,20 @@ $ convert img/lena.png -fill none -stroke blue -strokewidth 3 -draw "rectangle 2
 ```
 
 ![](http://i.imgur.com/yzcxwqk.png)
+
+
+## Using the library
+
+```
+import sys
+from ccv import ccv_read, ccv_write, sobel, lib
+
+# Read file passed.
+inp = ccv_read(sys.argv[1])
+# Apply Sobel.
+res = sobel(inp, lib.CCV_8U | lib.CCV_C1)
+# Save the result as "sobel.jpg"
+ccv_write(res, "sobel.jpg")
+```
+
+Pointers returned by the higher level wrapper, `ccv`, are automatically freed.
