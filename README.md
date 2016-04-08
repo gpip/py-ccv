@@ -83,3 +83,5 @@ This wrapper does not include an utility to draw the resulting rectangles, so th
 ```
 $ convert img/lena.png -fill none -stroke blue -strokewidth 3 -draw "rectangle 229,216 381,368" result.png
 ```
+
+![](http://i.imgur.com/yzcxwqk.png)
