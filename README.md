@@ -104,7 +104,7 @@ from ccv import ccv_read, ccv_write, sobel, lib
 # Read file passed.
 inp = ccv_read(sys.argv[1])
 # Apply Sobel.
-res = sobel(inp, lib.CCV_8U | lib.CCV_C1)
+res = sobel(inp, lib.CCV_8U)
 # Save the result as "sobel.jpg"
 ccv_write(res, "sobel.jpg")
 ```
