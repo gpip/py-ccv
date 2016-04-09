@@ -7,6 +7,11 @@ Feature = namedtuple("Feature", "x1 y1 x2 y2 confidence")
 
 _matrix_ref = lambda ptr: ffi.gc(ptr, lib.ccv_matrix_free)
 
+def _check_datatype(dtype):
+    if not dtype:
+        return  # CCV will make a guess.
+    assert dtype & 0xFF000, "Invalid data type: %d" % dtype
+
 
 def ccv_read(inp, ttype=None, rows=0, cols=0, scanline=0):
     """
@@ -52,6 +57,7 @@ def sobel(im, mtype, dx=1, dy=1):
         raise Exception("dx and dy must be odd if specified")
     if not dx and not dy:
         raise Exception("both dx and dy are missing")
+    _check_datatype(mtype)
 
     output = ffi.new('ccv_dense_matrix_t*[1]')
     lib.ccv_sobel(im, output, mtype, dx, dy)
@@ -77,6 +83,7 @@ def visualize(mat, outtype=0):
     Convert an input matrix into a matrix within visual range,
     so that one can output it into PNG or similar.
     """
+    _check_datatype(outtype)
     output = ffi.new('ccv_matrix_t*[1]')
     lib.ccv_visualize(mat, output, outtype)
     if output[0] == ffi.NULL:
