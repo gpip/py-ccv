@@ -31,6 +31,19 @@ def ccv_read(inp, ttype=None, rows=0, cols=0, scanline=0):
     return _matrix_ref(image[0])
 
 
+def ccv_slice(inp, x, y, rows, cols, ttype=0):
+    """
+    Slice an input matrix given offsets x and y, and number of rows
+    and columns. A new matrix is returned.
+    """
+    _check_datatype(ttype)
+    output = ffi.new('ccv_matrix_t*[1]')
+    lib.ccv_slice(inp, output, ttype, y, x, rows, cols)
+    if output[0] == ffi.NULL:
+        raise Exception("NULL output")
+    return _matrix_ref(output[0])
+
+
 def ccv_array_get(array, index, cast_to='ccv_comp_t*'):
     arr = array.data + (array.rsize * index)
     return ffi.cast(cast_to, arr)

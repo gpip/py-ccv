@@ -190,6 +190,7 @@ void ccv_scd_classifier_cascade_free(ccv_scd_classifier_cascade_t* cascade);
 void ccv_array_free(ccv_array_t*);
 void ccv_matrix_free(ccv_matrix_t*);
 
+void ccv_slice(ccv_matrix_t*, ccv_matrix_t**, int, int, int, int, int);
 void ccv_visualize(ccv_matrix_t*, ccv_matrix_t**, int);
 
 void ccv_sobel(ccv_dense_matrix_t*, ccv_dense_matrix_t**, int, int, int);
