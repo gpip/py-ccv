@@ -117,34 +117,54 @@ Pointers returned by the higher level wrapper, `ccv`, are automatically freed.
 Read an image from a filename and return an internal `ccv_dense_matrix_t*`.
 `ttype` can be specified to typically convert the input image to grayscale: `ttype=ccv.lib.CCV_IO_GRAY | ccv.lib.CCV_IO_ANY_FILE`.
 
+---
+
 ###### `ccv.ccv_write(im, outname)`
 Write an image (returned from `ccv_read` or other compatible functions) to a filename specified by `outname`.
+
+---
 
 ###### `ccv.ccv_slice(im, x, y, rows, cols)`
 Slice an input matrix given offsets `x` and `y`, and number of `rows` and columns. A new matrix is returned.
 
 > `ccv_slice` can be used to effectively crop a region of an input image and return a cropped image.
 
+---
+
 ###### `ccv.sobel(im, ttype, dx=1, dy=1)`
 Apply the Sobel operator to the input and return a new matrix. `dx` and `dy` dictate the window size for the operator, and is optimized for values of `1` and `3`. `ttype` defined the type of the output matrix, which for typical images should be set to `ccv.lib.CCV_8U`.
+
+---
 
 ###### `ccv.gradient(im, dx=1, dy=1)`
 Compute the gradient at each pixel and return, respectively, theta and magnitude matrices of type `ccv.lib.CCV_32F`. Typically, these matrices will be converted via `ccv.visualize` if you want to visually inspect them.
 
+---
+
 ###### `ccv.visualize(mat)`
 Convert an input matrix into a matrix within visual range.
+
+---
 
 ###### `ccv.prepare_scd_cascade(inp)`
 Read SCD classifier cascade from `inp` and return a `ccv_scd_classifier_cascade_t*`.
 
+---
+
 ###### `ccv.prepare_bbf_cascade(inp)`
 Read BBF classifier cascade from `inp` and return a `ccv_bbf_classifier_cascade_t*`.
+
+---
 
 ###### `ccv.scd_detect_objects(filename, cascade)`
 Use SURF-Cascade object detection by reading an image from `filename` and using the `cascade` obtained from `ccv.prepare_scd_cascade`. A list of `ccv.Feature` is returned.
 
+---
+
 ###### `ccv.bbf_detect_objects(filename, cascade)`
 Use Brightness Binary Feature object detection by reading an image from `filename` and using the `cascade` obtained from `ccv.prepare_bbf_cascade`. A list of `ccv.Feature` is returned.
+
+---
 
 ###### `ccv.Feature`
 A namedtuple with parameters `x1`, `y1`, `x2`, `y2`, and `confidence`.
