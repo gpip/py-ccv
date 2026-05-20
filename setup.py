@@ -12,7 +12,7 @@ setup(
 
     setup_requires=['cffi>=1.3.0', 'pytest-runner==2.6.2'],
     install_requires=['cffi>=1.3.0'],
-    tests_require=['pytest==2.8.7'],
+    tests_require=['pytest==9.0.3'],
     extras_require={
         'util': ['Pillow==3.2.0']
     },
